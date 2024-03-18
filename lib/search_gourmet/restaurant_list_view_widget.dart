@@ -22,52 +22,93 @@ class RestaurantListViewWidget extends StatefulWidget {
 
 // レストランのリストを画面に表示するリストウィジェット
 class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
-  final List<RestaurantSimpleInfoModel> _shopList = [];
+  final List<RestaurantSimpleInfoModel> _shopList = []; // レストランのリストの情報を籠っておく変数
+  // スクロールして一番下に当たると、次のページのデータを取得する機能の実装のため使用
+  final ScrollController _scrollController = ScrollController();
+  int _page = 0; // 現在何ページまで取得したのかを
+  bool _isLastPage = false;
+
+  int _currentRangeDistance = 3;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    _loadMoreData();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll(){
+    if(!_isLastPage && _scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+      setState(() {
+        _page += 1;
+      });
+      _loadMoreData();
+    }
+  }
+
+  Future<void> _loadMoreData() async {
+    final newData = await GourmetApiService.getRestaurantListByLocation(
+      lngi: 139.767125, lati: 35.681236,
+      range: _currentRangeDistance,
+      page: _page
+    );
+
+    setState(() {
+      if(newData.length < 20){
+        _isLastPage = true;
+      }
+
+      if (newData.length == 1) {
+        if(!_shopList.contains(newData[0])){
+          _shopList.addAll(newData);
+        }
+      } else {
+        _shopList.addAll(newData);
+      }
+    });
+  }
+
+  void _wipeScreenAndInitialize(){
+    _shopList.clear();
+    _page = 0;
+    _isLastPage = false;
+    _loadMoreData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchConditionNotifier>(
       builder: (context, searchOption, child){
-        return FutureBuilder(
-          future: GourmetApiService.getRestaurantListByLocation(
-              lngi: 139.767125, lati: 35.681236,
-              range: searchOption.selectedRangeDistance
-          ),
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              // 問題なく通信に成功すると画面にレストランのリストを表示
-              if (snapshot.data!.isNotEmpty) {
-                _shopList.addAll(snapshot.data!);
-                return ListView.separated(
-                    itemBuilder: (ctx, index){
-                      return RestaurantSimpleInfoWidget(
-                        id: _shopList[index].id,//
-                        thumbnailURI: _shopList[index].thumbnailURI,
-                        restaurantName: _shopList[index].restaurantName,
-                        accessRoute: _shopList[index].accessRoute,
-                        serviceArea: _shopList[index].serviceArea,
-                        genre: _shopList[index].genre,
-                        budget: _shopList[index].budget,
-                      );
-                    },
-                    separatorBuilder: (bc, i) =>
-                        Divider(
-                          height: 2,
-                          color: Colors.grey.withOpacity(0.35),
-                        ),
-                    itemCount: snapshot.data!.length
-                );
-              } else {
-                return const Text("結果がありません");
-              }
-            }
-            else if(snapshot.hasError){
-              return const Text("エラーが発生しました!!");
-            }
-            else{
-              return const CircularProgressIndicator();
-            }
-          }
+        if (searchOption.selectedRangeDistance != _currentRangeDistance) {
+          _currentRangeDistance = searchOption.selectedRangeDistance;
+          _wipeScreenAndInitialize();
+        }
+        return ListView.separated(
+            controller: _scrollController,
+            itemBuilder: (ctx, index){
+              return RestaurantSimpleInfoWidget(
+                id: _shopList[index].id,//
+                thumbnailURI: _shopList[index].thumbnailURI,
+                restaurantName: _shopList[index].restaurantName,
+                accessRoute: _shopList[index].accessRoute,
+                serviceArea: _shopList[index].serviceArea,
+                genre: _shopList[index].genre,
+                budget: _shopList[index].budget,
+              );
+            },
+            separatorBuilder: (bc, i) =>
+                Divider(
+                  height: 2,
+                  color: Colors.grey.withOpacity(0.35),
+                ),
+            itemCount: _shopList.length
         );
       },
     );

@@ -5,7 +5,7 @@ class SearchConditionNotifier extends ChangeNotifier {
 
   int get selectedRangeDistance => _selectedRangeDistance;
 
-  void set selectedRangeDistance(int distance){
+  set selectedRangeDistance(int distance){
     if(distance < 0 || distance > 4){
       throw Exception("正しくない値が伝わっている");
     }

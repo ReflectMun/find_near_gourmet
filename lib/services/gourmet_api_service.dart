@@ -19,8 +19,9 @@ class GourmetApiService{
   static Future<List<RestaurantSimpleInfoModel>> getRestaurantListByLocation({
     required double lati, required double lngi,
     required int range,
+    required int page
   }) async {
-    print("getRestaurantListByLocation: $range");
+    final String start = (page * 20 + 1).toString();
     final Uri requestUri = Uri(
       scheme: _scheme,
       host: _host,
@@ -31,6 +32,8 @@ class GourmetApiService{
         "lng": lngi.toString(),
         "lat": lati.toString(),
         "range": range.toString(),
+        "start": start,
+        "count": "20",
       }
     );
 

@@ -21,7 +21,8 @@ class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioBut
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onChanged(!widget.isSelected);
+        // 重複選択を防ぐため、選択したかどうかの状態を伝える
+        widget.onChanged(widget.isSelected);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -31,6 +32,7 @@ class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioBut
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(10),
         child: Center(
+          // ボタンに書かれる文
           child: Text(
             widget.label,
             style: TextStyle(
@@ -39,6 +41,8 @@ class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioBut
                 fontWeight: FontWeight.w400
             ),
           ),
+          // ボタンに書かれる文
+
         ),
       ),
     );

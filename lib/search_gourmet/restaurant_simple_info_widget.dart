@@ -1,4 +1,4 @@
-import 'package:find_near_gurume/restaurant_information/RestaurantDetailScreen.dart';
+import 'package:find_near_gurume/restaurant_information/restaurant_detail_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

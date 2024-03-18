@@ -71,7 +71,6 @@ class _SearchGourmetScreenState extends State<SearchGourmetScreen> {
                     return RestaurantListViewWidget(
                       longitude: snapshot.data!.longitude,
                       latitude: snapshot.data!.latitude,
-                      // initRange: Provider.of<SearchConditionNotifier>(context, listen: false).selectedRangeDistance,
                     );
                   }
                   else if(snapshot.hasError){

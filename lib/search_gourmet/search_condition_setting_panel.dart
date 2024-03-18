@@ -84,12 +84,12 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                         onChanged: (isNotSelected){
                           setState(() {
                             isNotSelected ?
-                                _selectedRangeDistance = index :
-                                _selectedRangeDistance = _selectedRangeDistance;
+                              _selectedRangeDistance = _selectedRangeDistance :
+                              _selectedRangeDistance = index;
                           });
                           Provider
-                              .of<SearchConditionNotifier>(context, listen: false)
-                              .selectedRangeDistance = _selectedRangeDistance;
+                            .of<SearchConditionNotifier>(context, listen: false)
+                            .selectedRangeDistance = _selectedRangeDistance;
                         },
                       );
                     },
