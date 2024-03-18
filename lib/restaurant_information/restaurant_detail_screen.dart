@@ -1,8 +1,9 @@
 import 'package:find_near_gurume/services/gourmet_api_service.dart';
 import 'package:flutter/material.dart';
 
+// レストランの詳細情報を表示する画面
 class RestaurantDetailScreen extends StatelessWidget {
-  final String id;
+  final String id; // レストランの詳細情報を取得するのに使うID値
 
   const RestaurantDetailScreen({super.key, required this.id});
 
@@ -11,7 +12,6 @@ class RestaurantDetailScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // レストラン情報
           FutureBuilder(
             future: GourmetApiService.getRestaurantInfoById(id: id),
             builder: (bctx, snapshot){
@@ -27,14 +27,19 @@ class RestaurantDetailScreen extends StatelessWidget {
                         fit: BoxFit.fill,
                       ),
                     ),
+
+                    // レストランの名
                     Text(snapshot.data!.restaurantName),
+                    // レストランの名
+
                     Text(snapshot.data!.address),
                     Text(snapshot.data!.open),
+
                   ],
                 );
               }
               else if(snapshot.hasError){
-                return const Text("Error!!");
+                return const Text("エラーが発生しました");
               }
               else{
                 return const CircularProgressIndicator();
