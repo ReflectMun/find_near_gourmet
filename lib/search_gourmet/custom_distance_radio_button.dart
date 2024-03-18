@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CustomDistanceRadioButton extends StatefulWidget {
+class CustomDistanceRadioButtonWidget extends StatefulWidget {
   final String label;
-  bool isSelected;
+  final bool isSelected;
   final Function(bool) onChanged;
 
-  CustomDistanceRadioButton({
+  const CustomDistanceRadioButtonWidget({
     super.key,
     required this.label,
     required this.onChanged,
@@ -13,10 +13,10 @@ class CustomDistanceRadioButton extends StatefulWidget {
   });
 
   @override
-  State<CustomDistanceRadioButton> createState() => _CustomDistanceRadioButtonState();
+  State<CustomDistanceRadioButtonWidget> createState() => _CustomDistanceRadioButtonWidgetState();
 }
 
-class _CustomDistanceRadioButtonState extends State<CustomDistanceRadioButton> {
+class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

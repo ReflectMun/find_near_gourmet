@@ -33,7 +33,7 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
             )
           ]
       ),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 10),
       child: Column(
         children: [
           // すワイプができる要素であることを示す手元アイコン
@@ -76,7 +76,7 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (ctx, index) {
-                        return CustomDistanceRadioButton(
+                        return CustomDistanceRadioButtonWidget(
                           label: _ranges[index],
                           isSelected: index == _selectedRangeDistance,
                           onChanged: (isSelected){

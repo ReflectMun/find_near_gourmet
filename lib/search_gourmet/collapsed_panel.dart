@@ -18,8 +18,8 @@ class CollapsedPanel extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(
           top: 10,
-          left: 10,
-          right: 10,
+          left: 0,
+          right: 0,
           bottom: 0 // 底に埋め込まれているような形を実装するため、ボトムのマージン値を0に設定
       ),
       child: Column(
