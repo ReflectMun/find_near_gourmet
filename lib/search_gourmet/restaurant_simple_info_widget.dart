@@ -78,6 +78,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                 // 各種情報
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // 所在地
                     Text(
@@ -91,11 +92,21 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // お店のジャンル
                         Container(
                           child: Text(
                             genre
                           ),
                         ),
+                        // お店のジャンル
+
+                        // 予算
+                        Container(
+                          child: Text(
+                            budget
+                          ),
+                        )
+                        // 予算
                       ],
                     ),
                   ],

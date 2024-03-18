@@ -79,9 +79,9 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                         return CustomDistanceRadioButtonWidget(
                           label: _ranges[index],
                           isSelected: index == _selectedRangeDistance,
-                          onChanged: (isSelected){
+                          onChanged: (isNotSelected){
                             setState(() {
-                              isSelected ?
+                              isNotSelected ?
                                   _selectedRangeDistance = index :
                                   _selectedRangeDistance = _selectedRangeDistance;
                             });
@@ -92,6 +92,7 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                   ),
                 ),
                 // 検索半径の選択ボタンリスト、おわり
+
               ],
             ),
           ),
