@@ -1,6 +1,8 @@
+import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:find_near_gurume/search_gourmet/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,8 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SearchGourmetScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SearchConditionNotifier>(
+          create: (context) => SearchConditionNotifier(),
+        )
+      ],
+      child: const MaterialApp(
+        home: SearchGourmetScreen(),
+      ),
     );
   }
 }

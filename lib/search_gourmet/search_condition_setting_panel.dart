@@ -1,4 +1,6 @@
+import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'custom_distance_radio_button.dart';
 
@@ -74,21 +76,24 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                 SizedBox(
                   height: 66,
                   child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, index) {
-                        return CustomDistanceRadioButtonWidget(
-                          label: _ranges[index],
-                          isSelected: index == _selectedRangeDistance,
-                          onChanged: (isNotSelected){
-                            setState(() {
-                              isNotSelected ?
-                                  _selectedRangeDistance = index :
-                                  _selectedRangeDistance = _selectedRangeDistance;
-                            });
-                          },
-                        );
-                      },
-                      itemCount: _ranges.length
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (ctx, index) {
+                      return CustomDistanceRadioButtonWidget(
+                        label: _ranges[index],
+                        isSelected: index == _selectedRangeDistance,
+                        onChanged: (isNotSelected){
+                          setState(() {
+                            isNotSelected ?
+                                _selectedRangeDistance = index :
+                                _selectedRangeDistance = _selectedRangeDistance;
+                          });
+                          Provider
+                              .of<SearchConditionNotifier>(context, listen: false)
+                              .selectedRangeDistance = _selectedRangeDistance;
+                        },
+                      );
+                    },
+                    itemCount: _ranges.length
                   ),
                 ),
                 // 検索半径の選択ボタンリスト、おわり

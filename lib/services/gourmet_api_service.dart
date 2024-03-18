@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:find_near_gurume/search_gourmet/model/restaurant_detail_info.dart';
@@ -17,7 +18,9 @@ class GourmetApiService{
   // GPS上の座標を基準にして周囲のレストランのリストを取得する機能
   static Future<List<RestaurantSimpleInfoModel>> getRestaurantListByLocation({
     required double lati, required double lngi,
+    required int range,
   }) async {
+    print("getRestaurantListByLocation: $range");
     final Uri requestUri = Uri(
       scheme: _scheme,
       host: _host,
@@ -26,9 +29,12 @@ class GourmetApiService{
         "key": _apiKey,
         "format": _jsonFormat,
         "lng": lngi.toString(),
-        "lat": lati.toString()
+        "lat": lati.toString(),
+        "range": range.toString(),
       }
     );
+
+    print(requestUri.toString());
 
     late final response;
     try {

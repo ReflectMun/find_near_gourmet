@@ -1,4 +1,5 @@
 import 'package:find_near_gurume/restaurant_information/RestaurantDetailScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantSimpleInfoWidget extends StatelessWidget {
@@ -59,6 +60,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
 
             // サムネイルと各種情報
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // サムネイル
                 SizedBox(
@@ -76,40 +78,60 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                 // スペイす
 
                 // 各種情報
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // 所在地
-                    Text(
-                      serviceArea,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    // 所在地
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // お店のジャンル
-                        Container(
-                          child: Text(
-                            genre
-                          ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 所在地
+                      Text(
+                        serviceArea,
+                        style: const TextStyle(
+                          fontSize: 16,
                         ),
-                        // お店のジャンル
+                      ),
+                      // 所在地
 
-                        // 予算
-                        Container(
-                          child: Text(
-                            budget
+                      const SizedBox(height: 7,),
+                  
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // お店のジャンル
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.all(Radius.circular(25))
+                            ),
+                            padding: const EdgeInsets.all(6),
+                            child: Text(
+                              genre,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700
+                              ),
+                            ),
                           ),
-                        )
-                        // 予算
-                      ],
-                    ),
-                  ],
+                          // お店のジャンル
+                  
+                          // 予算
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius: BorderRadius.all(Radius.circular(25))
+                            ),
+                            padding: const EdgeInsets.all(6),
+                            child: Text(
+                              budget,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          )
+                          // 予算
+                        ],
+                      ),
+                    ],
+                  ),
                 )
                 // 各種情報
               ],

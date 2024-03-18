@@ -1,8 +1,10 @@
+import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:find_near_gurume/search_gourmet/restaurant_list_view_widget.dart';
 import 'package:find_near_gurume/search_gourmet/search_condition_setting_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../services/geolocation_service.dart';
@@ -54,6 +56,9 @@ class _SearchGourmetScreenState extends State<SearchGourmetScreen> {
           topRight: Radius.circular(50),
           topLeft: Radius.circular(50),
         ),
+        onPanelClosed: (){
+          Provider.of<SearchConditionNotifier>(context, listen: false).notify();
+        },
         panel: const SearchConditionSettingPanel(), // パネルを上げた際に表示するウィジェット
         collapsed: const CollapsedPanel(), // パネルを下げた際に表示するウィジェット
         body: Column(
@@ -66,6 +71,7 @@ class _SearchGourmetScreenState extends State<SearchGourmetScreen> {
                     return RestaurantListViewWidget(
                       longitude: snapshot.data!.longitude,
                       latitude: snapshot.data!.latitude,
+                      // initRange: Provider.of<SearchConditionNotifier>(context, listen: false).selectedRangeDistance,
                     );
                   }
                   else if(snapshot.hasError){
