@@ -1,7 +1,7 @@
 import 'package:find_near_gurume/restaurant_information/restaurant_detail_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// APIから取得したデータをもとにして各店のデータを画面に表示するウィジェット
 class RestaurantSimpleInfoWidget extends StatelessWidget {
   final String id; // 詳細情報画面でレストランの詳しい情報を取得するに必要
   final String thumbnailURI; // サムネイルのイメージ先の情報
@@ -39,12 +39,12 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
         color: Colors.transparent,
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.symmetric(
-          horizontal: 12,
+          horizontal: 10,
           vertical: 15
         ),
         child: Column(
           children: [
-            // レストランの店名
+            // レストランの名
             Text(
               restaurantName,
               style: const TextStyle(
@@ -52,7 +52,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
             ),
-            // レストランの店名おわり
+            // レストランの名おわり
 
             // スペース
             SizedBox(height: 10, width: MediaQuery.of(context).size.width,),
@@ -62,7 +62,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // サムネイル
+                // サムネール
                 SizedBox(
                   height: 80,
                   width: 120,
@@ -71,11 +71,11 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                 ),
-                // サムネイルおわり
+                // サムネール
 
-                // スペイす
+                // サムネールと各種情報間のスペース
                 const SizedBox(width: 12,),
-                // スペイす
+                // サムネールと各種情報間のスペース
 
                 // 各種情報
                 Expanded(
@@ -91,8 +91,11 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                       ),
                       // 所在地
 
+                      // 所在地とジャンル ・ 予算情報間のスペース
                       const SizedBox(height: 7,),
-                  
+                      // 所在地とジャンル ・ 予算情報間のスペース
+
+                      // ジャンル ・ 予算情報
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -102,7 +105,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                               color: Colors.redAccent,
                               borderRadius: BorderRadius.all(Radius.circular(25))
                             ),
-                            padding: const EdgeInsets.all(6),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                             child: Text(
                               genre,
                               style: const TextStyle(
@@ -119,7 +122,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                               color: Colors.yellow,
                               borderRadius: BorderRadius.all(Radius.circular(25))
                             ),
-                            padding: const EdgeInsets.all(6),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                             child: Text(
                               budget,
                               style: const TextStyle(
@@ -130,6 +133,8 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                           // 予算
                         ],
                       ),
+                      // ジャンル ・ 予算情報
+
                     ],
                   ),
                 )

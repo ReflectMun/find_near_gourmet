@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:find_near_gurume/services/gourmet_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,15 @@ class RestaurantDetailScreen extends StatelessWidget {
   final String id; // レストランの詳細情報を取得するのに使うID値
 
   const RestaurantDetailScreen({super.key, required this.id});
+  
+  String replaceLast(String str, String pattern){
+    try {
+      String newString = "${str.substring(0, str.lastIndexOf(pattern))}\n${str.substring(str.lastIndexOf(pattern) + 1)}";
+      return newString;
+    } catch (e) {
+      return str;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,26 +26,182 @@ class RestaurantDetailScreen extends StatelessWidget {
             future: GourmetApiService.getRestaurantInfoById(id: id),
             builder: (bctx, snapshot){
               if(snapshot.hasData){
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 250,
-                      width: MediaQuery.of(context).size.width,
-                      child: Image.network(
-                        snapshot.data!.photo,
-                        fit: BoxFit.fill,
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // 代表イメージ
+                      SizedBox(
+                        height: 250,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.network(
+                          snapshot.data!.photo,
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    ),
+                      // 代表イメージ
 
-                    // レストランの名
-                    Text(snapshot.data!.restaurantName),
-                    // レストランの名
+                      // レストラン情報
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            // レストランの名
+                            Column(
+                              children: [
+                                // 店名
+                                AutoSizeText(
+                                  replaceLast(snapshot.data!.restaurantName.replaceFirst(" ", "\n"), " "),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 28,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  stepGranularity: 10,
+                                  minFontSize: 20,
+                                ),
+                                // 店名
+                        
+                                // かな名
+                                FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    snapshot.data!.kanaName.replaceAll("　", " "),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16
+                                    ),
+                                  ),
+                                ),
+                                // かな名
+                              ],
+                            ),
+                            // レストランの名
 
-                    Text(snapshot.data!.address),
-                    Text(snapshot.data!.open),
+                            // スペース
+                            const SizedBox(height: 20,),
+                            // スペース
+                        
+                            // 詳細情報一覧
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // レストランの住所 ・ アクセス
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 住所
+                                    const Text(
+                                      "住所",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        snapshot.data!.address,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18
+                                        ),
+                                      ),
+                                    ),
+                                    // 住所
+                        
+                                    // アクセス
+                                    const Text(
+                                      "アクセス",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20
+                                      ),
+                                    ),
+                        
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        snapshot.data!.accessRoute,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18
+                                        ),
+                                      ),
+                                    ),
+                                    // アクセス
+                                  ],
+                                ),
+                                // レストランの住所 ・ アクセス
+                        
+                                // スペース
+                                const SizedBox(height: 20,),
+                                // スペース
+                        
+                                // オープン時間
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "営業時間",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        snapshot.data!.open,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // オープン時間
+                        
+                                // スペース
+                                const SizedBox(height: 20,),
+                                // スペース
+                        
+                                // 休み情報
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "休み",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                    Text(
+                                      snapshot.data!.close,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                // 休み情報
+                        
+                              ],
+                            ),
+                            // 詳細情報一覧
 
-                  ],
+                          ],
+                        ),
+                      )
+                      // レストラン情報
+
+                    ],
+                  ),
                 );
               }
               else if(snapshot.hasError){

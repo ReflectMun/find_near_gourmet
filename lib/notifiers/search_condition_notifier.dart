@@ -10,9 +10,6 @@ class SearchConditionNotifier extends ChangeNotifier {
       throw Exception("正しくない値が伝わっている");
     }
     _selectedRangeDistance = distance + 1;
-  }
-
-  void notify(){
     notifyListeners();
   }
 }

@@ -1,10 +1,10 @@
 import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:find_near_gurume/search_gourmet/model/restaurant_simple_info.dart';
-import 'package:find_near_gurume/search_gourmet/restaurant_simple_info_widget.dart';
+import 'package:find_near_gurume/search_gourmet/widgets/restaurant_simple_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../services/gourmet_api_service.dart';
+import '../../services/gourmet_api_service.dart';
 
 class RestaurantListViewWidget extends StatefulWidget {
   final double longitude;
@@ -55,7 +55,8 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
 
   Future<void> _loadMoreData() async {
     final newData = await GourmetApiService.getRestaurantListByLocation(
-      lngi: 139.767125, lati: 35.681236,
+      lngi: 135.4959, lati: 34.7024,
+      // lngi: widget.longitude, lati: widget.latitude,
       range: _currentRangeDistance,
       page: _page
     );

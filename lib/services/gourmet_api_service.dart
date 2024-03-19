@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:dio/dio.dart';
-import 'package:find_near_gurume/search_gourmet/model/restaurant_detail_info.dart';
+import 'package:find_near_gurume/restaurant_information/model/restaurant_detail_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../search_gourmet/model/restaurant_simple_info.dart';
@@ -13,7 +12,7 @@ class GourmetApiService{
   static const String _host = "webservice.recruit.co.jp";
   static const String _path = "/hotpepper/gourmet/v1";
   static const String _jsonFormat = "json";
-  static final Dio dio = Dio();
+  static final Dio _dio = Dio();
 
   // GPS上の座標を基準にして周囲のレストランのリストを取得する機能
   static Future<List<RestaurantSimpleInfoModel>> getRestaurantListByLocation({
@@ -39,9 +38,9 @@ class GourmetApiService{
 
     print(requestUri.toString());
 
-    late final response;
+    late final dynamic response;
     try {
-      response = await dio.get(requestUri.toString());
+      response = await _dio.get(requestUri.toString());
     } catch (e) {
       throw Exception("接続できません!!");
     }
@@ -75,7 +74,7 @@ class GourmetApiService{
 
     late final Response response;
     try {
-      response = await dio.get(requestUri.toString());
+      response = await _dio.get(requestUri.toString());
     } catch (e) {
       throw Exception("接続できません!!");
     }

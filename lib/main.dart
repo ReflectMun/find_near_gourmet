@@ -1,5 +1,5 @@
 import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
-import 'package:find_near_gurume/search_gourmet/search_screen.dart';
+import 'package:find_near_gurume/map_screen/main_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: const MaterialApp(
-        home: SearchGourmetScreen(),
+        home: MainMapScreen(),
       ),
     );
   }
