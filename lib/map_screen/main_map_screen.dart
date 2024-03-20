@@ -1,4 +1,4 @@
-import 'package:find_near_gurume/map_screen/search_condition_setting_panel.dart';
+import 'package:find_near_gurume/map_screen/widgets/search_condition_setting_panel.dart';
 import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:find_near_gurume/search_gourmet/model/restaurant_simple_info.dart';
 import 'package:find_near_gurume/services/gourmet_api_service.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../services/geolocation_service.dart';
-import 'collapsed_panel.dart';
+import 'widgets/collapsed_panel.dart';
 
 class MainMapScreen extends StatefulWidget {
   const MainMapScreen({super.key});
@@ -19,29 +19,71 @@ class MainMapScreen extends StatefulWidget {
 
 class _MainMapScreenState extends State<MainMapScreen> {
   late GoogleMapController _googleMapController;
-  final Set<Marker> _markersSet = {};
+  Future<Set<Marker>> _markersSet = Future(() => {});
+  CameraPosition? _currentCameraPosition;
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   void _onMapCreated(GoogleMapController controller){
     _googleMapController = controller;
   }
 
-  void _addMarker() async {
-    final currentLocation = await GeolocationService.getCurrentPosition();
+  void _editMarkerWhenCameraMoved({required double latitude, required double longitude}) async {
+    setState(() {
+      _markersSet = _editMarker(latitude: latitude, longitude: longitude);
+    });
+  }
+
+  void _editMarkerWhenPanelClosed() async {
+    late final double latitude, longitude;
+
+    if(_currentCameraPosition != null){
+      latitude = _currentCameraPosition!.target.latitude;
+      longitude = _currentCameraPosition!.target.longitude;
+    }
+    else{
+      final currentPosition = await GeolocationService.getCurrentPosition();
+
+      latitude = currentPosition.latitude;
+      longitude = currentPosition.longitude;
+    }
+
+    setState(() {
+      _markersSet = _editMarker(latitude: latitude, longitude: longitude);
+    });
+  }
+
+  Future<Set<Marker>> _editMarker({required double latitude, required double longitude}) async {
     final restaurantList =
-        await GourmetApiService.getRestaurantMarkerListByLocation(
-          // lati: currentLocation.latitude, lngi: currentLocation.longitude,
-          lati: 34.7024, lngi: 135.4959,
-          range: Provider.of<SearchConditionNotifier>(context, listen: false).selectedRangeDistance,
-          page: 1
+        await GourmetApiService.getRestaurantListByLocation(
+          lati: latitude, lngi: longitude,
+          range: Provider.of<SearchConditionNotifier>(context, listen: false).rangeDistance,
+          page: 0,
+          count: 100,
+          genre: Provider.of<SearchConditionNotifier>(context, listen: false).genre,
+          budget: Provider.of<SearchConditionNotifier>(context, listen: false).budget,
         );
 
-    for(final restaurnat in restaurantList){
-      _markersSet.add(
+    Set<Marker> newMarkerSet = {};
+
+    for(final restaurant in restaurantList){
+      newMarkerSet.add(
         Marker(
-          markerId: MarkerId(restaurnat.id),
+          markerId: MarkerId(restaurant.id),
+          position: LatLng(restaurant.latitude, restaurant.longitude),
+          infoWindow: InfoWindow(
+            title: restaurant.genre,
+            snippet: restaurant.restaurantName,
+          ),
+          onTap: (){},
         )
       );
     }
+
+    return newMarkerSet;
   }
 
   @override
@@ -59,20 +101,41 @@ class _MainMapScreenState extends State<MainMapScreen> {
         panel: const SearchConditionSettingPanel(), // パネルを上げた際に表示するウィジェット
         collapsed: const CollapsedPanel(), // パネルを下げた際に表示するウィジェット
         onPanelClosed: (){
-          _addMarker();
+          _editMarkerWhenPanelClosed();
+          GourmetApiService.getRestaurantTest();
         },
         body: FutureBuilder(
           future: GeolocationService.getCurrentPosition(),
           builder: (context, snapshot){
             if(snapshot.hasData){
-             return GoogleMap(
-               onMapCreated: _onMapCreated,
-               markers: _markersSet,
-               initialCameraPosition: const CameraPosition(
-                 // target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
-                 target: LatLng(34.7024, 135.4959),
-                 zoom: 15.5
-               ),
+             return FutureBuilder(
+               future: _markersSet,
+               builder: (context, snap){
+                 if(snap.hasData){
+                  return GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    markers: snap.data!,
+                    initialCameraPosition: CameraPosition(
+                      // target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
+                      target: LatLng(34.7024, 135.4959),
+                      zoom: 15.5
+                    ),
+                    onCameraMove: (movedPosition){
+                      _currentCameraPosition = movedPosition;
+                      _editMarkerWhenCameraMoved(
+                        latitude: movedPosition.target.latitude,
+                        longitude: movedPosition.target.longitude,
+                      );
+                    },
+                  );
+                 }
+                 else if(snap.hasError){
+                   return const Text("Map pin Error");
+                 }
+                 else{
+                   return const CircularProgressIndicator();
+                 }
+               },
              );
             }
             else if(snapshot.hasError){

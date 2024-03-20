@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
-class CustomDistanceRadioButtonWidget extends StatefulWidget {
+class CustomRadioButtonWidget extends StatefulWidget {
   final String label;
   final bool isSelected;
+  final Color backgroundColorWhenSelected;
+  final Color textColorWhenSelected;
   final Function(bool) onChanged;
 
-  const CustomDistanceRadioButtonWidget({
+  const CustomRadioButtonWidget({
     super.key,
     required this.label,
     required this.onChanged,
     required this.isSelected,
+    this.backgroundColorWhenSelected = Colors.redAccent,
+    this.textColorWhenSelected = Colors.white,
   });
 
   @override
-  State<CustomDistanceRadioButtonWidget> createState() => _CustomDistanceRadioButtonWidgetState();
+  State<CustomRadioButtonWidget> createState() => _CustomRadioButtonWidgetState();
 }
 
-class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioButtonWidget> {
+class _CustomRadioButtonWidgetState extends State<CustomRadioButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,7 +30,7 @@ class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioBut
       },
       child: Container(
         decoration: BoxDecoration(
-            color: widget.isSelected ? Colors.redAccent : const Color(0xFFE9E9E9),
+            color: widget.isSelected ? widget.backgroundColorWhenSelected : const Color(0xFFE9E9E9),
             borderRadius: const BorderRadius.all(Radius.circular(20))
         ),
         padding: const EdgeInsets.all(10),
@@ -36,7 +40,7 @@ class _CustomDistanceRadioButtonWidgetState extends State<CustomDistanceRadioBut
           child: Text(
             widget.label,
             style: TextStyle(
-                color: widget.isSelected ? Colors.white : Colors.black,
+                color: widget.isSelected ? widget.textColorWhenSelected : Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400
             ),

@@ -6,6 +6,7 @@ class RestaurantSimpleInfoModel{
   final String serviceArea;
   final String genre;
   final String budget;
+  final double latitude, longitude;
 
   RestaurantSimpleInfoModel({
     required this.id,
@@ -15,6 +16,8 @@ class RestaurantSimpleInfoModel{
     required this.serviceArea,
     required this.genre,
     required this.budget,
+    required this.latitude,
+    required this.longitude
   });
 
   factory RestaurantSimpleInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +28,8 @@ class RestaurantSimpleInfoModel{
           accessRoute: json['mobile_access'],
           serviceArea: json['middle_area']['name'],
           genre: json['genre']['name'],
-          budget: json['budget']['name'] != "" ? json['budget']['name'] : "予算情報無し"
+          budget: json['budget']['name'] != "" ? json['budget']['name'] : "予算情報無し",
+          latitude: json['lat'],
+          longitude: json['lng'],
       );
 }

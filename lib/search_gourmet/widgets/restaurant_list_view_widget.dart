@@ -62,8 +62,10 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
     final newData = await GourmetApiService.getRestaurantListByLocation(
       lngi: 135.4959, lati: 34.7024,
       // lngi: widget.longitude, lati: widget.latitude,
-      range: Provider.of<SearchConditionNotifier>(context, listen: false).selectedRangeDistance,
-      page: _page
+      range: Provider.of<SearchConditionNotifier>(context, listen: false).rangeDistance,
+      page: _page,
+      genre: Provider.of<SearchConditionNotifier>(context, listen: false).genre,
+      budget: Provider.of<SearchConditionNotifier>(context, listen: false).budget,
     );
 
     // データを追加してsetStateを使ってデータの変更があったことを告げたら自動的に追加したデータが表示される
