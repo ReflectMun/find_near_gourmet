@@ -60,6 +60,52 @@ class GourmetApiService{
     }
   }
 
+  // GPS上の座標を基準にして周囲のレストランのリストを取得する機能
+  static Future<List<RestaurantSimpleInfoModel>> getRestaurantMarkerListByLocation({
+    required double lati, required double lngi,
+    required int range,
+    required int page
+  }) async {
+    final String start = (page * 20 + 1).toString();
+    final Uri requestUri = Uri(
+        scheme: _scheme,
+        host: _host,
+        path: _path,
+        queryParameters: {
+          "key": _apiKey,
+          "format": _jsonFormat,
+          "lng": lngi.toString(),
+          "lat": lati.toString(),
+          "range": range.toString(),
+          "start": start,
+          "count": "20",
+        }
+    );
+
+    print(requestUri.toString());
+
+    late final dynamic response;
+    try {
+      response = await _dio.get(requestUri.toString());
+    } catch (e) {
+      throw Exception("接続できません!!");
+    }
+
+    if (response.statusCode == 200) {
+      final jsonBody = jsonDecode(response.data);
+      Iterable restaurantList = jsonBody['results']['shop'];
+
+      List<RestaurantSimpleInfoModel> result =
+      List.from(
+          restaurantList.map((restaurant) => RestaurantSimpleInfoModel.fromJson(restaurant))
+      );
+
+      return result;
+    } else {
+      throw Exception("接続できません!!");
+    }
+  }
+
   static Future<RestaurantDetailInfoModel> getRestaurantInfoById({required String id}) async {
     final Uri requestUri = Uri(
         scheme: _scheme,

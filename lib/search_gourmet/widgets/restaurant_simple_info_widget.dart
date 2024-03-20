@@ -74,7 +74,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                 // サムネール
 
                 // サムネールと各種情報間のスペース
-                const SizedBox(width: 12,),
+                const SizedBox(width: 10,),
                 // サムネールと各種情報間のスペース
 
                 // 各種情報
@@ -92,7 +92,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                       // 所在地
 
                       // 所在地とジャンル ・ 予算情報間のスペース
-                      const SizedBox(height: 7,),
+                      const SizedBox(height: 5,),
                       // 所在地とジャンル ・ 予算情報間のスペース
 
                       // ジャンル ・ 予算情報
@@ -105,12 +105,13 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                               color: Colors.redAccent,
                               borderRadius: BorderRadius.all(Radius.circular(25))
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 7.5),
                             child: Text(
                               genre,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w700
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12
                               ),
                             ),
                           ),

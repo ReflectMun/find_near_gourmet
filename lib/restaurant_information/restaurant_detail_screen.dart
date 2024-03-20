@@ -80,117 +80,124 @@ class RestaurantDetailScreen extends StatelessWidget {
                             ),
                             // レストランの名
 
-                            // スペース
+                            // 店名と詳細情報一覧間のスペース
                             const SizedBox(height: 20,),
-                            // スペース
-                        
+                            // 店名と詳細情報一覧間のスペース
+
                             // 詳細情報一覧
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // レストランの住所 ・ アクセス
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // 住所
-                                    const Text(
-                                      "住所",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20
-                                      ),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        snapshot.data!.address,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow.withOpacity(0.125),
+                                    borderRadius: const BorderRadius.all(Radius.circular(25))
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // 住所
+                                      const Text(
+                                        "住所",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20
                                         ),
                                       ),
-                                    ),
-                                    // 住所
-                        
-                                    // アクセス
-                                    const Text(
-                                      "アクセス",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20
-                                      ),
-                                    ),
-                        
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        snapshot.data!.accessRoute,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          snapshot.data!.address,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 18
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    // アクセス
-                                  ],
+                                      // 住所
+
+                                      // アクセス
+                                      const Text(
+                                        "アクセス",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20
+                                        ),
+                                      ),
+
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          snapshot.data!.accessRoute,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 18
+                                          ),
+                                        ),
+                                      ),
+                                      // アクセス
+                                    ],
+                                  ),
                                 ),
                                 // レストランの住所 ・ アクセス
                         
-                                // スペース
+                                // 住所アクセスと営業時間間のスペース
                                 const SizedBox(height: 20,),
-                                // スペース
-                        
-                                // オープン時間
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "営業時間",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20
+                                // 住所アクセスと営業時間間のスペース
+
+                                // 営業時間と休み情報
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFFEEEE),
+                                    borderRadius: BorderRadius.all(Radius.circular(25))
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // 営業時間
+                                      const Text(
+                                        "営業時間",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20
+                                        ),
                                       ),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        snapshot.data!.open,
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          snapshot.data!.open,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 18
+                                          ),
+                                        ),
+                                      ),
+                                      // 営業時間
+
+                                      // 休み情報
+                                      const Text(
+                                        "休み",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data!.close,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 18
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // オープン時間
-                        
-                                // スペース
-                                const SizedBox(height: 20,),
-                                // スペース
-                        
-                                // 休み情報
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "休み",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20
-                                      ),
-                                    ),
-                                    Text(
-                                      snapshot.data!.close,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18
-                                      ),
-                                    ),
-                                  ],
+                                      )
+                                      // 休み情報
+                                    ],
+                                  ),
                                 )
-                                // 休み情報
-                        
+                                // 営業時間と休み情報
+
                               ],
                             ),
                             // 詳細情報一覧
@@ -224,18 +231,18 @@ class RestaurantDetailScreen extends StatelessWidget {
               },
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.white, // 흰색 배경 설정
-                  shape: BoxShape.circle, // 동그란 모양 설정
+                  color: Colors.white,
+                  shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.only(
                   top: 12,
                   left: 21,
                   right: 12,
                   bottom: 12
-                ), // 안쪽 여백 설정
+                ),
                 child: const Icon(
                   Icons.arrow_back_ios,
-                  color: Colors.black, // 아이콘 색상 설정
+                  color: Colors.black,
                 ),
               ),
             ),

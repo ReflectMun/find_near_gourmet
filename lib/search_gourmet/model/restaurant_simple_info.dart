@@ -25,6 +25,6 @@ class RestaurantSimpleInfoModel{
           accessRoute: json['mobile_access'],
           serviceArea: json['middle_area']['name'],
           genre: json['genre']['name'],
-          budget: json['budget']['name']
+          budget: json['budget']['name'] != "" ? json['budget']['name'] : "予算情報無し"
       );
 }

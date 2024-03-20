@@ -26,10 +26,9 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
   // スクロールして一番下に当たると、次のページのデータを取得する機能の実装のため使用
   final ScrollController _scrollController = ScrollController();
   int _page = 0; // 現在何ページまで取得したのかを
-  bool _isLastPage = false;
+  bool _isLastPage = false; // 最後のページまで取得したかどうかの情報を記録する変数
 
-  int _currentRangeDistance = 3;
-
+  // スクロール動作を感じするコントローラの初期化と一番目ページの情報を取得する
   @override
   void initState() {
     // TODO: implement initState
@@ -38,80 +37,79 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
     _loadMoreData();
   }
 
+  // このウィジェットが閉じたらスクロールコントローラーを除去
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
+  // 底までスクロールしたら起動される
   void _onScroll(){
+    // 最後のページではないつつも、底までスクロールしたら
     if(!_isLastPage && _scrollController.position.pixels == _scrollController.position.maxScrollExtent){
       setState(() {
+        // 次のページを取得するため、ページの番号を上げる
         _page += 1;
       });
+      // 次のページのデータを取得する
       _loadMoreData();
     }
   }
 
   Future<void> _loadMoreData() async {
+    // APIに次のページのデータを求める
     final newData = await GourmetApiService.getRestaurantListByLocation(
       lngi: 135.4959, lati: 34.7024,
       // lngi: widget.longitude, lati: widget.latitude,
-      range: _currentRangeDistance,
+      range: Provider.of<SearchConditionNotifier>(context, listen: false).selectedRangeDistance,
       page: _page
     );
 
+    // データを追加してsetStateを使ってデータの変更があったことを告げたら自動的に追加したデータが表示される
     setState(() {
+      // ページ毎に20個のデータを取るので、取得したデータの数が20個に足りなければ最後のページである
       if(newData.length < 20){
         _isLastPage = true;
       }
 
+      // 最後のデータ番号が1201ながら「1201番から20個のデータをお送りください」と求めたら
+      // 1個のデータを取得できるので2種類の場合ができる
       if (newData.length == 1) {
+        // 中腹データを含めないようにする
         if(!_shopList.contains(newData[0])){
           _shopList.addAll(newData);
         }
+      // それ以外の場合は取得したデータをレストランデータリストへ追加する
       } else {
         _shopList.addAll(newData);
       }
     });
   }
 
-  void _wipeScreenAndInitialize(){
-    _shopList.clear();
-    _page = 0;
-    _isLastPage = false;
-    _loadMoreData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<SearchConditionNotifier>(
-      builder: (context, searchOption, child){
-        if (searchOption.selectedRangeDistance != _currentRangeDistance) {
-          _currentRangeDistance = searchOption.selectedRangeDistance;
-          _wipeScreenAndInitialize();
-        }
-        return ListView.separated(
-            controller: _scrollController,
-            itemBuilder: (ctx, index){
-              return RestaurantSimpleInfoWidget(
-                id: _shopList[index].id,//
-                thumbnailURI: _shopList[index].thumbnailURI,
-                restaurantName: _shopList[index].restaurantName,
-                accessRoute: _shopList[index].accessRoute,
-                serviceArea: _shopList[index].serviceArea,
-                genre: _shopList[index].genre,
-                budget: _shopList[index].budget,
-              );
-            },
-            separatorBuilder: (bc, i) =>
-                Divider(
-                  height: 2,
-                  color: Colors.grey.withOpacity(0.35),
-                ),
-            itemCount: _shopList.length
-        );
-      },
+    return ListView.separated(
+        controller: _scrollController, // スクロール操作から実行するアクションを定義
+        itemBuilder: (ctx, index){
+          // 各レストランの情報を含めているウィジェットを表示
+          return RestaurantSimpleInfoWidget(
+            id: _shopList[index].id,//
+            thumbnailURI: _shopList[index].thumbnailURI,
+            restaurantName: _shopList[index].restaurantName,
+            accessRoute: _shopList[index].accessRoute,
+            serviceArea: _shopList[index].serviceArea,
+            genre: _shopList[index].genre,
+            budget: _shopList[index].budget,
+          );
+        },
+        // 区分線を表示
+        separatorBuilder: (bc, i) =>
+            Divider(
+              height: 2,
+              color: Colors.grey.withOpacity(0.35),
+            ),
+        itemCount: _shopList.length
     );
   }
 }
