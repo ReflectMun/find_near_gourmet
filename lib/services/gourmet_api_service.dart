@@ -27,6 +27,7 @@ class GourmetApiService{
   }) async {
     final String start = (page * 20 + 1).toString();
 
+    // リクエストURLを作る領域
     final Map<String, String> queryParameters = {
       "key": _apiKey,
       "format": _jsonFormat,
@@ -51,9 +52,9 @@ class GourmetApiService{
       path: _gourmetPath,
       queryParameters: queryParameters
     );
+    // リクエストURLを作る領域
 
-    print(requestUri.toString());
-
+    // APIにリクエストを送る
     late final dynamic response;
     try {
       response = await _dio.get(requestUri.toString());
@@ -61,10 +62,12 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
+    // 取得したデータをオブジェクト化
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.data);
       Iterable restaurantList = jsonBody['results']['shop'];
 
+      // レストランの情報リストに作る
       List<RestaurantSimpleInfoModel> result =
         List.from(
           restaurantList.map((restaurant) => RestaurantSimpleInfoModel.fromJson(restaurant))
@@ -78,6 +81,7 @@ class GourmetApiService{
 
   // レストランのIDでレストランの詳細情報を取得する機能
   static Future<RestaurantDetailInfoModel> getRestaurantInfoById({required String id}) async {
+    // リクエストURLを作る
     final Uri requestUri = Uri(
         scheme: _scheme,
         host: _host,
@@ -89,6 +93,7 @@ class GourmetApiService{
         }
     );
 
+    // リクエストURLを送る
     late final Response response;
     try {
       response = await _dio.get(requestUri.toString());
@@ -96,6 +101,7 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
+    // 取得したデータをオブジェクト化する
     if(response.statusCode == 200){
       final jsonBody = jsonDecode(response.data);
       RestaurantDetailInfoModel shop = RestaurantDetailInfoModel.fromJson(jsonBody['results']['shop'][0]);
@@ -108,6 +114,7 @@ class GourmetApiService{
 
   // 検索するに使えるジャンルのリストを取得する機能
   static Future<List<Map<String, String?>>> getGenreList() async {
+    // リクエストURLを作る
     final Uri requestUri = Uri(
         scheme: _scheme,
         host: _host,
@@ -118,6 +125,7 @@ class GourmetApiService{
         }
     );
 
+    // リクエストURLを送る
     late final Response response;
     try {
       response = await _dio.get(requestUri.toString());
@@ -125,6 +133,7 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
+    // 取得したデータを
     if(response.statusCode == 200){
       final jsonBody = jsonDecode(response.data);
       Iterable genreData = jsonBody['results']['genre'];
@@ -141,6 +150,7 @@ class GourmetApiService{
 
   // 検索するに使える価格範囲のリストを取得する機能
   static Future<List<Map<String, String?>>> getBudgetList() async {
+    // リクエストURLを作る
     final Uri requestUri = Uri(
         scheme: _scheme,
         host: _host,
@@ -151,6 +161,7 @@ class GourmetApiService{
         }
     );
 
+    // リクエストURLを送る
     late final Response response;
     try {
       response = await _dio.get(requestUri.toString());

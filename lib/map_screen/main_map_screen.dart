@@ -75,10 +75,9 @@ class _MainMapScreenState extends State<MainMapScreen> {
           markerId: MarkerId(restaurant.id),
           position: LatLng(restaurant.latitude, restaurant.longitude),
           infoWindow: InfoWindow(
-            title: restaurant.genre,
-            snippet: restaurant.restaurantName,
+            title: restaurant.restaurantName,
+            snippet: restaurant.genre,
           ),
-          onTap: (){},
         )
       );
     }
@@ -98,7 +97,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
           topRight: Radius.circular(50),
           topLeft: Radius.circular(50),
         ),
-        panel: const SearchConditionSettingPanel(), // パネルを上げた際に表示するウィジェット
+        panel: SearchConditionSettingPanel(position: _currentCameraPosition,), // パネルを上げた際に表示するウィジェット
         collapsed: const CollapsedPanel(), // パネルを下げた際に表示するウィジェット
         onPanelClosed: (){
           _editMarkerWhenPanelClosed();
@@ -116,8 +115,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                     onMapCreated: _onMapCreated,
                     markers: snap.data!,
                     initialCameraPosition: CameraPosition(
-                      // target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
-                      target: LatLng(34.7024, 135.4959),
+                      target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
+                      // target: LatLng(34.7024, 135.4959),
                       zoom: 15.5
                     ),
                     onCameraMove: (movedPosition){

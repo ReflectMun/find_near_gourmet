@@ -1,33 +1,15 @@
 import 'package:find_near_gurume/search_gourmet/widgets/restaurant_list_view_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
-import '../services/geolocation_service.dart';
+class SearchResultListScreen extends StatelessWidget {
+  final double longitude;
+  final double latitude;
 
-class SearchResultListScreen extends StatefulWidget {
-  const SearchResultListScreen({super.key});
-
-  @override
-  State<SearchResultListScreen> createState() => _SearchResultListScreenState();
-}
-
-class _SearchResultListScreenState extends State<SearchResultListScreen> {
-  late final Future<Position?> _currentPosition = _initializeCurrentPosition(); // 現在地の位置情報取得
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  static Future<Position?> _initializeCurrentPosition() async {
-    try {
-      final position = await GeolocationService.getCurrentPosition();
-      return position;
-    } catch (e) {
-      print("에러: $e");
-      return null;
-    }
-  }
+  const SearchResultListScreen({
+    super.key,
+    required this.longitude,
+    required this.latitude,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,29 +26,9 @@ class _SearchResultListScreenState extends State<SearchResultListScreen> {
       body: Column(
         children: [
           Expanded(
-            child: FutureBuilder(
-              future: _currentPosition,
-              builder: (bctx, snapshot){
-                if(snapshot.hasData){
-                  return RestaurantListViewWidget(
-                    longitude: snapshot.data!.longitude,
-                    latitude: snapshot.data!.latitude,
-                  );
-                }
-                else if(snapshot.hasError){
-                  return const Column(
-                    children: [
-                      Center(
-                          child: Text("位置情報に接近できません！")
-                      ),
-                    ],
-                  );
-                }
-                else{
-                  return const CircularProgressIndicator();
-                }
-
-              },
+            child: RestaurantListViewWidget(
+              longitude: longitude,
+              latitude: latitude,
             ),
           ),
         ],

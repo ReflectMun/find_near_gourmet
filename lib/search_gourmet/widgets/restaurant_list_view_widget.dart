@@ -33,6 +33,7 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _shopList.clear();
     _scrollController.addListener(_onScroll);
     _loadMoreData();
   }
@@ -60,8 +61,7 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
   Future<void> _loadMoreData() async {
     // APIに次のページのデータを求める
     final newData = await GourmetApiService.getRestaurantListByLocation(
-      lngi: 135.4959, lati: 34.7024,
-      // lngi: widget.longitude, lati: widget.latitude,
+      lngi: widget.longitude, lati: widget.latitude,
       range: Provider.of<SearchConditionNotifier>(context, listen: false).rangeDistance,
       page: _page,
       genre: Provider.of<SearchConditionNotifier>(context, listen: false).genre,

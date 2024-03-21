@@ -2,13 +2,17 @@ import 'package:find_near_gurume/notifiers/search_condition_notifier.dart';
 import 'package:find_near_gurume/search_gourmet/search_result_list_screen.dart';
 import 'package:find_near_gurume/services/gourmet_api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_radio_button.dart';
 
 class SearchConditionSettingPanel extends StatefulWidget {
-  const SearchConditionSettingPanel({
+  CameraPosition? position;
+
+  SearchConditionSettingPanel({
     super.key,
+    required this.position,
   });
 
   @override
@@ -265,7 +269,10 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                    const SearchResultListScreen()
+                    SearchResultListScreen(
+                      longitude: widget.position!.target.longitude,
+                      latitude: widget.position!.target.latitude,
+                    )
                 )
               );
             },
