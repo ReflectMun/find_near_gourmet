@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomRadioButtonWidget extends StatefulWidget {
-  final String label;
-  final bool isSelected;
-  final Color backgroundColorWhenSelected;
-  final Color textColorWhenSelected;
-  final Function(bool) onChanged;
+  final String label; // ボタンに表示する内容
+  final bool isSelected; // ボタンが選択されたかどうかの状態
+  final Color backgroundColorWhenSelected; // 選択された際の背景色
+  final Color textColorWhenSelected; // 選択された際のテキスト色
+  final Function(bool) onChanged; // 選択したボタンが変わった際に実行する
 
   const CustomRadioButtonWidget({
     super.key,
@@ -25,7 +25,7 @@ class _CustomRadioButtonWidgetState extends State<CustomRadioButtonWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 重複選択を防ぐため、選択したかどうかの状態を伝える
+        // ボタンの現在選択されたかどうかの状態を渡す
         widget.onChanged(widget.isSelected);
       },
       child: Container(
@@ -36,7 +36,7 @@ class _CustomRadioButtonWidgetState extends State<CustomRadioButtonWidget> {
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(10),
         child: Center(
-          // ボタンに書かれる文
+          // ボタンに表示するテキスト
           child: Text(
             widget.label,
             style: TextStyle(
@@ -45,7 +45,7 @@ class _CustomRadioButtonWidgetState extends State<CustomRadioButtonWidget> {
                 fontWeight: FontWeight.w400
             ),
           ),
-          // ボタンに書かれる文
+          // ボタンに表示するテキスト
 
         ),
       ),

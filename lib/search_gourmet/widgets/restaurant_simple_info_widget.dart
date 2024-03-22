@@ -1,7 +1,7 @@
 import 'package:find_near_gurume/restaurant_information/restaurant_detail_screen.dart';
 import 'package:flutter/material.dart';
 
-// APIから取得したデータをもとにして各店のデータを画面に表示するウィジェット
+// 各レストランの簡単な情報を表示するウィジェット
 class RestaurantSimpleInfoWidget extends StatelessWidget {
   final String id; // 詳細情報画面でレストランの詳しい情報を取得するに必要
   final String thumbnailURI; // サムネイルのイメージ先の情報
@@ -26,11 +26,12 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapUp: (details) {
-        // お店をタッチすると詳細情報へ移る
+        // レストランの項目をタッチすると詳細画面へ移動する
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (bctx) =>
+            // 詳細画面で情報の表示ができるよう、レストランのIDを伝える
              RestaurantDetailScreen(id: id)
           )
         );
@@ -54,11 +55,11 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
             ),
             // レストランの名おわり
 
-            // スペース
+            // レストランの名とサムネイル、各種情報領域間のスペース
             SizedBox(height: 10, width: MediaQuery.of(context).size.width,),
-            // スペースおわり
+            // レストランの名とサムネイル、各種情報領域間のスペース
 
-            // サムネイルと各種情報
+            // サムネイルと各種情報領域
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,11 +92,11 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                       ),
                       // 所在地
 
-                      // 所在地とジャンル ・ 予算情報間のスペース
+                      // 所在地とジャンル ・ 価格帯情報間のスペース
                       const SizedBox(height: 5,),
-                      // 所在地とジャンル ・ 予算情報間のスペース
+                      // 所在地とジャンル ・ 価格帯情報間のスペース
 
-                      // ジャンル ・ 予算情報
+                      // ジャンル ・ 価格帯情報
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -116,8 +117,8 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                             ),
                           ),
                           // お店のジャンル
-                  
-                          // 予算
+
+                          // 価格帯
                           Container(
                             decoration: const BoxDecoration(
                               color: Colors.yellow,
@@ -130,23 +131,24 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                          )
-                          // 予算
+                          ),
+                          // 価格帯
+
                         ],
                       ),
-                      // ジャンル ・ 予算情報
+                      // ジャンル ・ 価格帯情報
 
                     ],
                   ),
-                )
+                ),
                 // 各種情報
               ],
             ),
-            // サムネイルと各種情報
+            // サムネイルと各種情報領域
 
-            // スペース
+            // サムネイル、各種情報領域とアクセス情報間のスペース
             const SizedBox(height: 10,),
-            // スペースおわり
+            // サムネイル、各種情報領域とアクセス情報間のスペース
 
             // アクセス情報
             Container(
@@ -163,6 +165,7 @@ class RestaurantSimpleInfoWidget extends StatelessWidget {
               ),
             ),
             // アクセス情報
+
           ],
         ),
       ),

@@ -11,6 +11,7 @@ class GeolocationService{
 
     LocationPermission permission = await Geolocator.checkPermission();
     if(permission != LocationPermission.always || permission != LocationPermission.whileInUse){
+      // 位置情報の接近が拒否されているとリクエストを再度するが、この機能はiOSでは動作しない
       permission = await Geolocator.requestPermission();
       if(permission == LocationPermission.always || permission == LocationPermission.whileInUse){
         return await Geolocator.getCurrentPosition();

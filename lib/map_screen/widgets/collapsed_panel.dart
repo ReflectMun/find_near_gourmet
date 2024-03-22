@@ -24,8 +24,9 @@ class CollapsedPanel extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // すワイプができる要素であることを示す手元アイコン
+          // スワイプができる要素であることを示す手元アイコン
           const Icon(Icons.dehaze_outlined),
+          // スワイプができる要素であることを示す手元アイコン
 
           // 検索条件の設定ができる領域であることを示すタイトル
           Container(
@@ -40,7 +41,8 @@ class CollapsedPanel extends StatelessWidget {
               ),
             ),
           ),
-          // タイトルのおわり
+          // 検索条件の設定ができる領域であることを示すタイトル
+
         ],
       ),
     );

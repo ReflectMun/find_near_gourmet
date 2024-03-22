@@ -67,7 +67,7 @@ class GourmetApiService{
       final jsonBody = jsonDecode(response.data);
       Iterable restaurantList = jsonBody['results']['shop'];
 
-      // レストランの情報リストに作る
+      // 取得したデータをアプリで扱えるデータに変換
       List<RestaurantSimpleInfoModel> result =
         List.from(
           restaurantList.map((restaurant) => RestaurantSimpleInfoModel.fromJson(restaurant))
@@ -101,7 +101,7 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
-    // 取得したデータをオブジェクト化する
+    // 取得したデータをアプリで扱えるデータに変換
     if(response.statusCode == 200){
       final jsonBody = jsonDecode(response.data);
       RestaurantDetailInfoModel shop = RestaurantDetailInfoModel.fromJson(jsonBody['results']['shop'][0]);
@@ -133,10 +133,11 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
-    // 取得したデータを
+    // 取得したデータをアプリで扱えるデータに変換
     if(response.statusCode == 200){
       final jsonBody = jsonDecode(response.data);
       Iterable genreData = jsonBody['results']['genre'];
+      // 全種類のジャンルのレストランの検索にはジャンルの指定が不要のでnullで設定
       final List<Map<String, String?>> genreList = [{"全て": null}];
       genreList.addAll(
           List.from(genreData.map<Map<String, String?>>( (genre) => {genre['name']: genre['code']} ))
@@ -169,9 +170,11 @@ class GourmetApiService{
       throw Exception("接続できません!!");
     }
 
+    // 取得したデータをアプリで扱えるデータに変換
     if(response.statusCode == 200){
       final jsonBody = jsonDecode(response.data);
       Iterable budgetData = jsonBody['results']['budget'];
+      // 全ての価格帯のレストランの検索にはジャンルの指定が不要のでnullで設定
       final List<Map<String, String?>> budgetList = [{"全て": null}];
       budgetList.addAll(
           List.from(budgetData.map<Map<String, String?>>( (genre) => {genre['name']: genre['code']} ))

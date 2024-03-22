@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'custom_radio_button.dart';
 
+// 検索条件を定めることができるパネルウィジェット
 class SearchConditionSettingPanel extends StatefulWidget {
   CameraPosition? position;
 
@@ -20,16 +21,15 @@ class SearchConditionSettingPanel extends StatefulWidget {
 }
 
 class _SearchConditionSettingPanelState extends State<SearchConditionSettingPanel> {
+  // 選択できる検索半径のリスト
   static const List<String> _ranges = ["300m", "500m", "1km", "2km", "3km"];
 
-  int _selectedRangeDistance = _ranges.indexOf("1km"); // 最初の距離は1kmに設定
+  // 選択した検索半径。最初は「1km」にする
+  int _selectedRangeDistance = _ranges.indexOf("1km");
+  // 選択したレストランのジャンル。最初は「全て」にする
   int _selectedGenre = 0;
+  // 選択した価格帯。最初は「全て」にする
   int _selectedBudget = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
           ),
           // 検索条件パネルのタイトル
 
-          // 検索条件リスト
+          // 検索条件を定めることができるところ
           Expanded(
             // 将来にオプションの追加が容易にできるようするため、SingleChildScrollViewを選択
             child: SingleChildScrollView(
@@ -107,13 +107,18 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                               itemBuilder: (ctx, index) {
                                 return CustomRadioButtonWidget(
                                   label: _ranges[index],
+                                  // ボタンの番号と選択番号が一致する場合、選択したボタンにする
+                                  // 逆の場合、選択していないボタンにする
                                   isSelected: index == _selectedRangeDistance,
                                   onChanged: (isNotSelected){
                                     setState(() {
                                       isNotSelected ?
+                                      // すでに選択しておいたボタンの場合、何もしない
                                       _selectedRangeDistance = _selectedRangeDistance :
+                                      // 選択していないボタンの場合、選択したボタンを変える
                                       _selectedRangeDistance = index;
                                     });
+                                    // 選択したボタンの番号を渡す
                                     Provider
                                         .of<SearchConditionNotifier>(context, listen: false)
                                         .rangeDistance = _selectedRangeDistance;
@@ -191,14 +196,14 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                     ),
                     // ジャンル選択ボタンのリスト領域
 
-                    // ジャンル領域とバジェット領域間のスペース
+                    // ジャンル領域と価格帯領域間のスペース
                     const SizedBox(height: 20,),
-                    // ジャンル領域とバジェット領域間のスペース
+                    // ジャンル領域と価格帯領域間のスペース
 
-                    // 予算選択ボタンのリスト領域
+                    // 価格帯選択ボタンのリスト領域
                     Column(
                       children: [
-                        // バジェットのタイトル
+                        // 価格帯のタイトル
                         const Center(
                           child: Text(
                             "価格範囲",
@@ -208,9 +213,9 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                             ),
                           ),
                         ),
-                        // バジェットのタイトル
+                        // 価格帯のタイトル
 
-                        // バジェット選択ボタンのリスト
+                        // 価格帯選択ボタンのリスト
                         FutureBuilder(
                           future: GourmetApiService.getBudgetList(),
                           builder: (context, snapshot) {
@@ -249,18 +254,18 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                             }
                           },
                         ),
-                        // バジェット選択ボタンのリスト
+                        // 価格帯選択ボタンのリスト
 
                       ],
                     ),
-                    // 予算選択ボタンのリスト領域
+                    // 価格帯選択ボタンのリスト領域
 
                   ],
                 ),
               ),
             ),
           ),
-          // 検索条件リスト
+          // 検索条件を定めることができるところ
 
           // リストへ移動するボタン
           GestureDetector(
@@ -269,6 +274,7 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
+                  // リストへ移動する際に地図の現在中心座標を渡す
                     SearchResultListScreen(
                       longitude: widget.position!.target.longitude,
                       latitude: widget.position!.target.latitude,

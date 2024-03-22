@@ -7,12 +7,14 @@ class RestaurantDetailScreen extends StatelessWidget {
   final String id; // レストランの詳細情報を取得するのに使うID値
 
   const RestaurantDetailScreen({super.key, required this.id});
-  
+
+  // 文字列で一番後ろのパタン一つを改行文字に変える
   String replaceLast(String str, String pattern){
     try {
       String newString = "${str.substring(0, str.lastIndexOf(pattern))}\n${str.substring(str.lastIndexOf(pattern) + 1)}";
       return newString;
     } catch (e) {
+      // 一行の文字列であると改行しない
       return str;
     }
   }
@@ -20,8 +22,10 @@ class RestaurantDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBarを使わないながら戻りボタンを付けるため、Stackを使用
       body: Stack(
         children: [
+          // レストランの詳細情報全体
           FutureBuilder(
             future: GourmetApiService.getRestaurantInfoById(id: id),
             builder: (bctx, snapshot){
@@ -30,7 +34,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // 代表イメージ
+                      // 最上段に表示する代表イメージ
                       SizedBox(
                         height: 250,
                         width: MediaQuery.of(context).size.width,
@@ -39,9 +43,9 @@ class RestaurantDetailScreen extends StatelessWidget {
                           fit: BoxFit.fill,
                         ),
                       ),
-                      // 代表イメージ
+                      // 最上段に表示する代表イメージ
 
-                      // レストラン情報
+                      // レストランの詳細情報一覧
                       Container(
                         padding: const EdgeInsets.all(20),
                         child: Column(
@@ -88,7 +92,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // レストランの住所 ・ アクセス
+                                // レストランの住所 ・ アクセス領域
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.yellow.withOpacity(0.125),
@@ -141,13 +145,13 @@ class RestaurantDetailScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                // レストランの住所 ・ アクセス
-                        
-                                // 住所アクセスと営業時間間のスペース
-                                const SizedBox(height: 20,),
-                                // 住所アクセスと営業時間間のスペース
+                                // レストランの住所 ・ アクセス領域
 
-                                // 営業時間と休み情報
+                                // 住所アクセス領域と営業時間領域間のスペース
+                                const SizedBox(height: 20,),
+                                // 住所アクセス領域と営業時間領域間のスペース
+
+                                // 営業時間と休み情報の領域
                                 Container(
                                   decoration: const BoxDecoration(
                                     color: Color(0xFFFFEEEE),
@@ -191,12 +195,13 @@ class RestaurantDetailScreen extends StatelessWidget {
                                             fontWeight: FontWeight.w400,
                                             fontSize: 18
                                         ),
-                                      )
+                                      ),
                                       // 休み情報
+
                                     ],
                                   ),
-                                )
-                                // 営業時間と休み情報
+                                ),
+                                // 営業時間と休み情報の領域
 
                               ],
                             ),
@@ -204,8 +209,8 @@ class RestaurantDetailScreen extends StatelessWidget {
 
                           ],
                         ),
-                      )
-                      // レストラン情報
+                      ),
+                      // レストランの詳細情報一覧
 
                     ],
                   ),
@@ -219,7 +224,7 @@ class RestaurantDetailScreen extends StatelessWidget {
               }
             },
           ),
-          // レストラン情報おわり
+          // レストランの詳細情報全体
 
           // 戻りボタン
           Positioned(
@@ -247,7 +252,8 @@ class RestaurantDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          // 戻りボタンおわり
+          // 戻りボタン
+
         ],
       ),
     );

@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../../services/gourmet_api_service.dart';
 
+// 実際にレストランのリストを画面に描くウィジェット
 class RestaurantListViewWidget extends StatefulWidget {
+  // 渡された地図の中心座標
   final double longitude;
   final double latitude;
 
@@ -20,7 +22,6 @@ class RestaurantListViewWidget extends StatefulWidget {
   State<RestaurantListViewWidget> createState() => _RestaurantListViewWidgetState();
 }
 
-// レストランのリストを画面に表示するリストウィジェット
 class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
   final List<RestaurantSimpleInfoModel> _shopList = []; // レストランのリストの情報を籠っておく変数
   // スクロールして一番下に当たると、次のページのデータを取得する機能の実装のため使用
@@ -28,13 +29,14 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
   int _page = 0; // 現在何ページまで取得したのかを
   bool _isLastPage = false; // 最後のページまで取得したかどうかの情報を記録する変数
 
-  // スクロール動作を感じするコントローラの初期化と一番目ページの情報を取得する
+  // スクロール動作を感知するコントローラの初期設定と最初ページの情報を取得する
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _shopList.clear();
+    // スクロールコントローラに一番下までスクロールすると行う動作を渡す
     _scrollController.addListener(_onScroll);
+    // 最初ページのデータを取得し、画面に表示する
     _loadMoreData();
   }
 
@@ -45,19 +47,20 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
     super.dispose();
   }
 
-  // 底までスクロールしたら起動される
+  // 一番下までスクロールしたら行われる動作
   void _onScroll(){
-    // 最後のページではないつつも、底までスクロールしたら
+    // 最後のページではないつつ、一番下までスクロールしたら
     if(!_isLastPage && _scrollController.position.pixels == _scrollController.position.maxScrollExtent){
       setState(() {
         // 次のページを取得するため、ページの番号を上げる
         _page += 1;
       });
-      // 次のページのデータを取得する
+      // 次のページのデータを取得し、続けてレストラン情報のウィジェットを画面に追加する
       _loadMoreData();
     }
   }
 
+  // レストランのデータを取得し、画面に取得したレストラン情報のウィジェットを画面に追加する
   Future<void> _loadMoreData() async {
     // APIに次のページのデータを求める
     final newData = await GourmetApiService.getRestaurantListByLocation(
@@ -68,7 +71,7 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
       budget: Provider.of<SearchConditionNotifier>(context, listen: false).budget,
     );
 
-    // データを追加してsetStateを使ってデータの変更があったことを告げたら自動的に追加したデータが表示される
+    // データを追加してsetStateを使ってデータの変更があったことを告げたら自動的に追加したデータが続けて表示される
     setState(() {
       // ページ毎に20個のデータを取るので、取得したデータの数が20個に足りなければ最後のページである
       if(newData.length < 20){

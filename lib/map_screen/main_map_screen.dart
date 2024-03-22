@@ -10,6 +10,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../services/geolocation_service.dart';
 import 'widgets/collapsed_panel.dart';
 
+// アプリを最初起動する際に表示される画面
 class MainMapScreen extends StatefulWidget {
   const MainMapScreen({super.key});
 
@@ -18,28 +19,28 @@ class MainMapScreen extends StatefulWidget {
 }
 
 class _MainMapScreenState extends State<MainMapScreen> {
-  late GoogleMapController _googleMapController;
-  Future<Set<Marker>> _markersSet = Future(() => {});
-  CameraPosition? _currentCameraPosition;
+  late GoogleMapController _googleMapController; // 地図の初期設定に使う
+  Future<Set<Marker>> _markersSet = Future(() => {}); // 地図に表示するマーカーのデータ
+  CameraPosition? _currentCameraPosition; // 地図の現在画面の中心座標のデータ
 
-  @override
-  void initState(){
-    super.initState();
-  }
-
+  // 地図が最初にローディングする際に行われる
   void _onMapCreated(GoogleMapController controller){
     _googleMapController = controller;
   }
 
+  // 地図のカメラが移されると
   void _editMarkerWhenCameraMoved({required double latitude, required double longitude}) async {
     setState(() {
       _markersSet = _editMarker(latitude: latitude, longitude: longitude);
     });
   }
 
+  // パネルを閉じるとパネルから設定した情報によって新しいレストランの情報を取得し、マーカーを更新する機能
   void _editMarkerWhenPanelClosed() async {
     late final double latitude, longitude;
 
+    // 起動際から一度も地図を移さなかった場合、地図の中心座標情報がないので
+    // 地図の中心座標の代わりに利用者の現在位置情報を使用してレストランの検索に使う
     if(_currentCameraPosition != null){
       latitude = _currentCameraPosition!.target.latitude;
       longitude = _currentCameraPosition!.target.longitude;
@@ -51,12 +52,15 @@ class _MainMapScreenState extends State<MainMapScreen> {
       longitude = currentPosition.longitude;
     }
 
+    // 設定した座標を基盤にてマーカーを修正する
     setState(() {
       _markersSet = _editMarker(latitude: latitude, longitude: longitude);
     });
   }
 
+  // 座標情報をもらって、その座標の周りのレストランを検索し、取得した情報によってマーカーを再配置する
   Future<Set<Marker>> _editMarker({required double latitude, required double longitude}) async {
+    // レストラン情報を取得
     final restaurantList =
         await GourmetApiService.getRestaurantListByLocation(
           lati: latitude, lngi: longitude,
@@ -67,6 +71,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
           budget: Provider.of<SearchConditionNotifier>(context, listen: false).budget,
         );
 
+    // 再配置するマーカーのデータをこもる変数
     Set<Marker> newMarkerSet = {};
 
     for(final restaurant in restaurantList){
@@ -82,6 +87,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
       );
     }
 
+    // 作られた新しいマーカーリストデータを返信
     return newMarkerSet;
   }
 
@@ -92,7 +98,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
         maxHeight: 650, // パネルの上がり上限
         minHeight: 125, // パネルの下がり下限
         backdropEnabled: true, // パネルを上げた際にバックグラウンドのタッチを防ぐ
-        renderPanelSheet: false, // Floatingパネルを実装するため、基本パネルを非表示にする
+        renderPanelSheet: false,
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(50),
           topLeft: Radius.circular(50),
@@ -111,16 +117,21 @@ class _MainMapScreenState extends State<MainMapScreen> {
                future: _markersSet,
                builder: (context, snap){
                  if(snap.hasData){
+                   // 位置情報に接近できると地図をローディング
                   return GoogleMap(
                     onMapCreated: _onMapCreated,
                     markers: snap.data!,
                     initialCameraPosition: CameraPosition(
+                      // 利用者の位置を最初の中心座標に設定する
                       target: LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
-                      // target: LatLng(34.7024, 135.4959),
                       zoom: 15.5
                     ),
+                    // カメラが動く都度に地図の中心座標を検索基準座標に設定
                     onCameraMove: (movedPosition){
+                      // 移った画面の中心座標を現在の座標に設定
                       _currentCameraPosition = movedPosition;
+
+                      // 地図の
                       _editMarkerWhenCameraMoved(
                         latitude: movedPosition.target.latitude,
                         longitude: movedPosition.target.longitude,
@@ -129,18 +140,22 @@ class _MainMapScreenState extends State<MainMapScreen> {
                   );
                  }
                  else if(snap.hasError){
-                   return const Text("Map pin Error");
+                   // マーカーに表示する情報を取得するのに失敗するとエラーメッセージを表示
+                   return const Text("通信中に問題が発生しました!");
                  }
                  else{
+                   // 通信中であるとローディングアイコンを表示
                    return const CircularProgressIndicator();
                  }
                },
              );
             }
             else if(snapshot.hasError){
-              return const Text("Map Error!!");
+              // 位置情報の接近できないとエラーメッセージを表示
+              return const Text("位置情報の使用を許可してください!");
             }
             else{
+              // 位置情報の取得を待っているとローディングアイコンを表示
               return const CircularProgressIndicator();
             }
 

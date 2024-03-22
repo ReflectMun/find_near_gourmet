@@ -1,6 +1,7 @@
 import 'package:find_near_gurume/search_gourmet/widgets/restaurant_list_view_widget.dart';
 import 'package:flutter/material.dart';
 
+// 地図中心座標の周りのレストランのリストを表示する画面
 class SearchResultListScreen extends StatelessWidget {
   final double longitude;
   final double latitude;
@@ -26,6 +27,7 @@ class SearchResultListScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
+            // 実際にリストを画面上に表示するウィジェット
             child: RestaurantListViewWidget(
               longitude: longitude,
               latitude: latitude,

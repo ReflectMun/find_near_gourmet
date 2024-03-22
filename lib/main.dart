@@ -17,6 +17,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+      // プロバイダーを使うためプロバイダーを登録する
+      // 最初の設計では多数のプロバイダーを使う予定だったことの痕跡である
       providers: [
         ChangeNotifierProvider<SearchConditionNotifier>(
           create: (context) => SearchConditionNotifier(),
