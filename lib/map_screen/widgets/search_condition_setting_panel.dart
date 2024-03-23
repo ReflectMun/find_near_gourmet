@@ -35,7 +35,10 @@ class _SearchConditionSettingPanelState extends State<SearchConditionSettingPane
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(45)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(45),
+            topRight: Radius.circular(45),
+          ),
           color: Color(0xFFFDFDFD),
           boxShadow: [
             BoxShadow(
