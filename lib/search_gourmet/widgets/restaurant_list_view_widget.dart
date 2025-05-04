@@ -37,7 +37,7 @@ class _RestaurantListViewWidgetState extends State<RestaurantListViewWidget> {
     // スクロールコントローラに一番下までスクロールすると行う動作を渡す
     _scrollController.addListener(_onScroll);
     // 最初ページのデータを取得し、画面に表示する
-    _loadMoreData();
+    _loadMoreData().then((value){});
   }
 
   // このウィジェットが閉じたらスクロールコントローラーを除去
